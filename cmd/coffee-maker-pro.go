@@ -4,35 +4,51 @@ import (
 	"bufio"
 	"coffee-maker-pro/internal/sensors"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
-const environmentTemp = 23
+func initSensors(temp *sensors.Sensor, pressure *sensors.Sensor) {
+	sensors.Init(temp)
+	sensors.Init(pressure)
+}
 
-func initializeTemperature(tempSensor *sensors.Sensor) {
-	tempSensor.SetSensorValue(environmentTemp)
+func readAndUpdateSensors(temp *sensors.Sensor, pressure *sensors.Sensor) {
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		input := strings.Split(scanner.Text(), " ")
+		command := input[0]
+		newValue, err := strconv.ParseFloat(input[1], 64)
+		if err != nil {
+			fmt.Errorf("%w\n", err)
+		} else {
+			if command == "temp_up" {
+				temp.SetSensorValue(newValue)
+				log.Println("New temperature set.")
+			} else if command == "press_up" {
+				pressure.SetSensorValue(newValue)
+				log.Println("New pressure set.")
+			}
+		}
+	}
+
 }
 
 func main() {
-	tempSensor := sensors.Create(sensors.PRESSURE)
-	initializeTemperature(&tempSensor)
+	log.Println("Starting coffee maker pro...")
+	tempSensor := sensors.Create(sensors.TEMP)
+	pressureSensor := sensors.Create(sensors.PRESSURE)
 
-	go func() {
-		scanner := bufio.NewScanner(os.Stdin)
-		for scanner.Scan() {
-			input := scanner.Text()
-			newValue, err := strconv.ParseFloat(input, 64)
-			if err != nil {
-				fmt.Errorf("%w\n", err)
-			} else {
-				tempSensor.SetSensorValue(newValue)
-			}
-		}
-	}()
+	initSensors(&tempSensor, &pressureSensor)
+
+	go readAndUpdateSensors(&tempSensor, &pressureSensor)
+
 	for true {
-		fmt.Printf("%f\n", tempSensor.GetSensorValue())
+		sensors.Log(&tempSensor)
+		sensors.Log(&pressureSensor)
 		time.Sleep(time.Second)
 	}
 }
