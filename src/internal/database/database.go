@@ -28,6 +28,8 @@ func Init() *mongo.Client {
 		log.Fatal(err)
 	}
 
+	//defer client.Disconnect(ctx)
+
 	return client
 }
 
@@ -35,6 +37,15 @@ func Query[T any](client *mongo.Client, collection CollectionName) T {
 	var result T
 	coll := client.Database(DB).Collection(string(collection))
 	err := coll.FindOne(ctx, bson.D{}).Decode(&result)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return result
+}
+
+func Insert[T any](client *mongo.Client, collection CollectionName, payload T) *mongo.InsertOneResult {
+	coll := client.Database(DB).Collection(string(collection))
+	result, err := coll.InsertOne(ctx, payload)
 	if err != nil {
 		log.Fatal(err)
 	}

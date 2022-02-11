@@ -1,41 +1,16 @@
 package main
 
 import (
-	"bufio"
 	"coffee-maker-pro/internal/database"
 	"coffee-maker-pro/internal/sensor"
-	"fmt"
 	"log"
-	"os"
-	"strconv"
-	"strings"
 	"time"
 )
 
-func initSensors(temp *sensor.Sensor, pressure *sensor.Sensor) {
-	sensor.Init(temp)
-	sensor.Init(pressure)
-}
-
-func readAndUpdateSensors(temp *sensor.Sensor, pressure *sensor.Sensor) {
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		input := strings.Split(scanner.Text(), " ")
-		command := input[0]
-		newValue, err := strconv.ParseFloat(input[1], 64)
-		if err != nil {
-			fmt.Errorf("%w\n", err)
-		} else {
-			if command == "temp_up" {
-				temp.SetSensorValue(newValue)
-				log.Println("New temperature set.")
-			} else if command == "press_up" {
-				pressure.SetSensorValue(newValue)
-				log.Println("New pressure set.")
-			}
-		}
-	}
-
+func initCoffeeMaker(tempSensor *sensor.Sensor, pressureSensor *sensor.Sensor) {
+	sensor.Init(tempSensor, sensor.EnvironmentTemp)
+	sensor.Init(pressureSensor, sensor.InitialPressure)
+	go sensor.ChangeTemperature(tempSensor, 95)
 }
 
 func main() {
@@ -44,15 +19,13 @@ func main() {
 	pressureSensor := sensor.Create(sensor.PRESSURE)
 
 	dbClient := database.Init()
-	database.Query[interface{}](dbClient, database.SENSORS)
+	initCoffeeMaker(&tempSensor, &pressureSensor)
 
-	initSensors(&tempSensor, &pressureSensor)
-
-	go readAndUpdateSensors(&tempSensor, &pressureSensor)
-
+	lastTemp := sensor.Create(sensor.TEMP)
+	lastPress := sensor.Create(sensor.PRESSURE)
 	for true {
-		//sensors.Log(&tempSensor)
-		//sensors.Log(&pressureSensor)
+		sensor.Log(dbClient, &tempSensor, &lastTemp)
+		sensor.Log(dbClient, &pressureSensor, &lastPress)
 		time.Sleep(time.Second)
 	}
 }
