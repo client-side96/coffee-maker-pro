@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const EnvironmentTemp = 90
+const EnvironmentTemp = 23
 const InitialPressure = 0.5
 
 func getNameBySensorType(sensorType SensorType) string {

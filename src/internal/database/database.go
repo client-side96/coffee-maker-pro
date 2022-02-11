@@ -33,10 +33,10 @@ func Init() *mongo.Client {
 	return client
 }
 
-func Query[T any](client *mongo.Client, collection CollectionName) T {
+func Query[T any](client *mongo.Client, collection CollectionName, queryFilter bson.D, opts *options.FindOneOptions) T {
 	var result T
 	coll := client.Database(DB).Collection(string(collection))
-	err := coll.FindOne(ctx, bson.D{}).Decode(&result)
+	err := coll.FindOne(ctx, queryFilter, opts).Decode(&result)
 	if err != nil {
 		log.Fatal(err)
 	}

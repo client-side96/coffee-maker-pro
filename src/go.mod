@@ -2,18 +2,20 @@ module coffee-maker-pro
 
 go 1.18
 
-require go.mongodb.org/mongo-driver v1.8.3
+require (
+	github.com/gin-gonic/gin v1.7.7
+	go.mongodb.org/mongo-driver v1.8.3
+)
 
 require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/contrib v0.0.0-20201101042839-6a891bf89f19 // indirect
-	github.com/gin-gonic/gin v1.7.7 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
