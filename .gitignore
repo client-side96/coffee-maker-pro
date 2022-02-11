@@ -1,4 +1,5 @@
 .idea
 data/
 pkg/*
-bin/
+bin/*
+/bin/
