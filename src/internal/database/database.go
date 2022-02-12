@@ -11,11 +11,11 @@ import (
 const USER = "cmp-user"
 const PW = "admin"
 const HOST = "localhost"
-const PORT = "27017"
+const PORT = "27011"
 const DB = "cmp-db"
 
 var ctx = context.TODO()
-var connectionString = "mongodb://" + USER + ":" + PW + "@" + HOST + ":" + PORT + "/" + DB
+var connectionString = "mongodb://" + USER + ":" + PW + "@" + HOST + ":" + PORT + "/" + DB + "?connect=direct"
 
 func Init() *mongo.Client {
 	clientOptions := options.Client().ApplyURI(connectionString)
@@ -50,4 +50,28 @@ func Insert[T any](client *mongo.Client, collection CollectionName, payload T) *
 		log.Fatal(err)
 	}
 	return result
+}
+
+func Watch(client *mongo.Client, collection CollectionName) *bson.M {
+	var result bson.M
+	coll := client.Database(DB).Collection(string(collection))
+	cursor, err := coll.Watch(ctx, mongo.Pipeline{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for cursor.Next(ctx) {
+		if err := cursor.Decode(&result); err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("%v", result)
+
+		//return &result
+	}
+
+	if err := cursor.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return &result
 }

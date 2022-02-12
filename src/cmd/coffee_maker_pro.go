@@ -23,6 +23,9 @@ func main() {
 
 	lastTemp := sensor.Create(sensor.TEMP)
 	lastPress := sensor.Create(sensor.PRESSURE)
+
+	go database.Watch(dbClient, database.SENSORS)
+	//log.Printf("%v", result)
 	for true {
 		sensor.Log(dbClient, &tempSensor, &lastTemp)
 		sensor.Log(dbClient, &pressureSensor, &lastPress)

@@ -2,12 +2,9 @@ package api
 
 import (
 	"coffee-maker-pro/internal/database"
-	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"net/http"
 )
@@ -28,22 +25,10 @@ func sensorWs(w http.ResponseWriter, r *http.Request) {
 	}
 
 	client := database.Init()
-	ctx := context.Background()
-	sensorCollection := client.Database(database.DB).Collection(string(database.SENSORS))
-	matchStage := bson.D{{"$match", bson.D{{"operationType", "insert"}}}}
-	changeStream, _ := sensorCollection.Watch(ctx, mongo.Pipeline{matchStage})
-	defer changeStream.Close(ctx)
-	for changeStream.Next(ctx) {
-		var result bson.M
-		if err := changeStream.Decode(&result); err != nil {
-			log.Fatal(err)
-		}
-		conn.WriteMessage(1, []byte(fmt.Sprintf("%v", result)))
-	}
+	result := database.Watch(client, database.SENSORS)
 
-	if err := changeStream.Err(); err != nil {
-		log.Fatal(err)
-	}
+	conn.WriteMessage(1, []byte(fmt.Sprintf("%v", result)))
+
 }
 
 func SensorEndpoint(c *gin.Context) {

@@ -1,13 +1,52 @@
 version: "3.3"
 
 services:
-  mongodb:
+  mongo1:
+    hostname: mongo1
+    container_name: localmongo1
     image: mongo
-    container_name: mongodb
-    environment:
-      - PUID=1000
-      - PGID=1000
     volumes:
-      - ./data:/data/db
+      - ./data/data1:/data/db
+    expose:
+      - 27017
     ports:
-      - "27017:27017"
+      - 27011:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+  mongo2:
+    hostname: mongo2
+    container_name: localmongo2
+    image: mongo
+    volumes:
+      - ./data/data2:/data/db
+    expose:
+      - 27017
+    ports:
+      - 27012:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+  mongo3:
+    hostname: mongo3
+    container_name: localmongo3
+    image: mongo
+    volumes:
+      - ./data/data3:/data/db
+    expose:
+      - 27017
+    ports:
+      - 27013:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+#services:
+#  mongodb:
+#    image: mongo
+#    container_name: mongodb
+##    command: ["mongod", "--config", "/etc/mongod.conf"]
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#    volumes:
+#      - ./data:/data/db
+#      - ./mongod.conf:/etc/mongod.conf
+#    ports:
+#      - "27017:27017"
