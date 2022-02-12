@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"encoding/json"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -33,7 +34,7 @@ func Init() *mongo.Client {
 	return client
 }
 
-func Query[T any](client *mongo.Client, collection CollectionName, queryFilter bson.D, opts *options.FindOneOptions) T {
+func Query[T any](client *mongo.Client, collection CollectionName, queryFilter bson.M, opts *options.FindOneOptions) T {
 	var result T
 	coll := client.Database(DB).Collection(string(collection))
 	err := coll.FindOne(ctx, queryFilter, opts).Decode(&result)
@@ -52,26 +53,33 @@ func Insert[T any](client *mongo.Client, collection CollectionName, payload T) *
 	return result
 }
 
-func Watch(client *mongo.Client, collection CollectionName) *bson.M {
-	var result bson.M
+func Watch(client *mongo.Client, collection CollectionName) *mongo.ChangeStream {
 	coll := client.Database(DB).Collection(string(collection))
-	cursor, err := coll.Watch(ctx, mongo.Pipeline{})
+	cursor, err := coll.Watch(ctx, mongo.Pipeline{}, options.ChangeStream().SetFullDocument(options.UpdateLookup))
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	for cursor.Next(ctx) {
-		if err := cursor.Decode(&result); err != nil {
-			log.Fatal(err)
-		}
-		log.Printf("%v", result)
-
-		//return &result
 	}
 
 	if err := cursor.Err(); err != nil {
 		log.Fatal(err)
 	}
 
-	return &result
+	return cursor
+
+}
+
+func PrepareWatchResult[T any](fullDocument interface{}, template T) []byte {
+	bsonBytes, err := bson.Marshal(fullDocument)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	bson.Unmarshal(bsonBytes, &template)
+
+	result, err := json.Marshal(template)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return result
 }

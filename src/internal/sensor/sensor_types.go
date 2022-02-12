@@ -41,8 +41,8 @@ func (s Sensor) ToDB() DBSensor {
 }
 
 type DBSensor struct {
-	ID         primitive.ObjectID `bson:"_id,omitempty"`
-	Value      float64            `bson:"value,omitempty"`
-	SensorType SensorType         `bson:"type,omitempty"`
-	Timestamp  primitive.DateTime `bson:"timestamp,omitempty"`
+	ID         primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Value      float64            `bson:"value,omitempty" json:"value"`
+	SensorType SensorType         `bson:"type,omitempty" json:"sensorType"`
+	Timestamp  primitive.DateTime `bson:"timestamp,omitempty" json:"timestamp"`
 }
