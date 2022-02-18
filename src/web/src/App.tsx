@@ -7,6 +7,7 @@ import {
 } from "./sensors/sensorSelectors";
 import { Sensor } from "./sensors/sensorTypes";
 import SensorTile from "./sensors/components/SensorTile";
+import "./App.scss";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -18,9 +19,15 @@ function App() {
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <SensorTile title="Temperature" sensorData={currentTemp} unit="Celsius" />
-      <SensorTile title="Pressure" sensorData={currentPressure} unit="HPa" />
+    <div className="container">
+      <div className="sensor-wrapper">
+        <SensorTile
+          title="Temperature"
+          sensorData={currentTemp}
+          unit="Celsius"
+        />
+        <SensorTile title="Pressure" sensorData={currentPressure} unit="bar" />
+      </div>
     </div>
   );
 }

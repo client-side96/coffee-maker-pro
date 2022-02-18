@@ -1,0 +1,31 @@
+.sensor-tile {
+  background-color: #3f37c9;
+  color: #fff;
+  width: 250px;
+  padding: 1em 2em;
+  margin: 1em;
+  border-radius: 5px;
+
+  .sensor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h5 {
+      font-size: 1em;
+    }
+    .sensor-icon {
+      fill: #fff;
+      height: 30px;
+      margin-left: auto;
+    }
+  }
+
+
+
+  p{
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+
+
+}
