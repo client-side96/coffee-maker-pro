@@ -29,7 +29,10 @@ const SensorTile: React.FC<SensorTileProps> = ({ title, sensorData, unit }) => {
         <SensorIcon type={sensorData?.sensorType} />
       </div>
       <p>
-        {sensorData ? sensorData.value : "-"} {unit}
+        {sensorData !== undefined && sensorData !== null
+          ? sensorData.value
+          : "-"}{" "}
+        {unit}
       </p>
     </div>
   );
