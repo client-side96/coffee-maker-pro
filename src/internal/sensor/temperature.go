@@ -1,8 +1,12 @@
 package sensor
 
-import "time"
+import (
+	"log"
+	"time"
+)
 
 func ChangeTemperature(tempSensor *Sensor, target float64) {
+	log.Printf("Changing to target temperature: %f", target)
 	current := tempSensor.GetSensorValue()
 	for current != target {
 		current = current + 2

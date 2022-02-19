@@ -16,26 +16,31 @@ const (
 type SensorType string
 
 type Sensor struct {
-	name       string
-	value      float64
-	sensorType SensorType
-	timestamp  string
+	Name       string
+	Value      float64
+	PrevValue  float64
+	SensorType SensorType
+	Timestamp  string
 }
 
 func (s *Sensor) SetSensorValue(newValue float64) {
-	s.value = newValue
+	s.Value = newValue
+}
+
+func (s *Sensor) SetSensorPrevValue(newValue float64) {
+	s.PrevValue = newValue
 }
 
 func (s Sensor) GetSensorValue() float64 {
-	return s.value
+	return s.Value
 }
 
 func (s Sensor) ToDB() DBSensor {
 	timestamp := time.Now()
 	return DBSensor{
 		ID:         primitive.ObjectID{},
-		Value:      s.value,
-		SensorType: s.sensorType,
+		Value:      s.Value,
+		SensorType: s.SensorType,
 		Timestamp:  primitive.NewDateTimeFromTime(timestamp),
 	}
 }

@@ -33,13 +33,11 @@ func sensorWs(w http.ResponseWriter, r *http.Request) {
 	findOptions := options.FindOne()
 	findOptions.SetSort(bson.M{"timestamp": -1})
 
-	lastTemperature := database.Query[sensor.DBSensor](dbClient, database.SENSORS, bson.M{"type": sensor.TEMP}, findOptions)
-	lastPressure := database.Query[sensor.DBSensor](dbClient, database.SENSORS, bson.M{"type": sensor.PRESSURE}, findOptions)
-	lastTemperatureB, _ := json.Marshal(lastTemperature)
-	lastPressureB, _ := json.Marshal(lastPressure)
+	lastTemperature, _ := json.Marshal(database.Query[sensor.DBSensor](dbClient, database.SENSORS, bson.M{"type": sensor.TEMP}, findOptions))
+	lastPressure, _ := json.Marshal(database.Query[sensor.DBSensor](dbClient, database.SENSORS, bson.M{"type": sensor.PRESSURE}, findOptions))
 
-	conn.WriteMessage(1, lastTemperatureB)
-	conn.WriteMessage(1, lastPressureB)
+	conn.WriteMessage(1, lastTemperature)
+	conn.WriteMessage(1, lastPressure)
 
 	var changeStreamValue bson.M
 	var template sensor.DBSensor
@@ -55,6 +53,5 @@ func sensorWs(w http.ResponseWriter, r *http.Request) {
 }
 
 func SensorEndpoint(c *gin.Context) {
-
 	sensorWs(c.Writer, c.Request)
 }
