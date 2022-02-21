@@ -53,6 +53,15 @@ func Insert[T any](client *mongo.Client, collection CollectionName, payload T) *
 	return result
 }
 
+func Update(client *mongo.Client, collection CollectionName, payload bson.M, queryFiler bson.M) *mongo.UpdateResult {
+	coll := client.Database(DB).Collection(string(collection))
+	result, err := coll.UpdateOne(ctx, queryFiler, payload)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return result
+}
+
 func Watch(client *mongo.Client, collection CollectionName) *mongo.ChangeStream {
 	coll := client.Database(DB).Collection(string(collection))
 	cursor, err := coll.Watch(ctx, mongo.Pipeline{}, options.ChangeStream().SetFullDocument(options.UpdateLookup))

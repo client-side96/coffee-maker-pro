@@ -8,15 +8,34 @@ import {
 import { Sensor } from "./sensors/sensorTypes";
 import SensorTile from "./sensors/components/SensorTile";
 import "./App.scss";
+import { statusWs, turnOff, turnOn } from "./status/statusThunks";
+import { selectStatus } from "./status/statusSelector";
 
 function App() {
   const dispatch = useAppDispatch();
   const currentTemp = useAppSelector(selectTempSensor);
   const currentPressure = useAppSelector(selectPressureSensor);
+  const status = useAppSelector(selectStatus);
+
+  const isPowerOn = status.status !== "Off";
 
   React.useEffect(() => {
-    dispatch(sensorWs());
+    const closeSensorConnection = dispatch(sensorWs());
+    const closeStatusConnection = dispatch(statusWs());
+
+    return () => {
+      closeSensorConnection();
+      closeStatusConnection();
+    };
   }, []);
+
+  const handlePower = () => {
+    if (isPowerOn) {
+      turnOff();
+    } else {
+      turnOn();
+    }
+  };
 
   return (
     <div className="container">
@@ -28,6 +47,9 @@ function App() {
         />
         <SensorTile title="Pressure" sensorData={currentPressure} unit="bar" />
       </div>
+      <button onClick={handlePower}>
+        {isPowerOn ? "Turn off" : "Turn on"}
+      </button>
     </div>
   );
 }

@@ -52,6 +52,6 @@ func sensorWs(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func SensorEndpoint(c *gin.Context) {
+func GetSensorData(c *gin.Context) {
 	sensorWs(c.Writer, c.Request)
 }
