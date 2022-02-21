@@ -10,7 +10,6 @@ const statusSlice = createSlice({
   initialState,
   reducers: {
     setStatus(state, action: PayloadAction<StatusResponse>) {
-      console.log(action.payload);
       state.status = action.payload.value;
       state.id = action.payload._id;
     },

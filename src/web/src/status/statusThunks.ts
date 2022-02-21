@@ -17,7 +17,6 @@ export const statusWs = () => (dispatch: AppDispatch) => {
 
   c.onmessage = function (msg) {
     const response: StatusResponse = JSON.parse(msg.data);
-    console.log(response);
     dispatch(setStatus(response));
   };
 

@@ -20,6 +20,7 @@ var connectionString = "mongodb://" + USER + ":" + PW + "@" + HOST + ":" + PORT 
 
 func Init() *mongo.Client {
 	clientOptions := options.Client().ApplyURI(connectionString)
+	log.Println("Connecting to database...")
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -31,6 +32,7 @@ func Init() *mongo.Client {
 
 	//defer client.Disconnect(ctx)
 
+	log.Println("Database connected.")
 	return client
 }
 

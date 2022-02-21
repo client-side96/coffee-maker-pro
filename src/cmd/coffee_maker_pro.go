@@ -5,11 +5,12 @@ import (
 	"coffee-maker-pro/internal/sensor"
 	"coffee-maker-pro/internal/server"
 	"coffee-maker-pro/internal/statemachine"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"net"
 	"net/http"
 	"net/rpc"
-	"time"
 )
 
 func initSensors(tempSensor *sensor.Sensor, pressureSensor *sensor.Sensor) {
@@ -20,6 +21,7 @@ func initSensors(tempSensor *sensor.Sensor, pressureSensor *sensor.Sensor) {
 }
 
 func main() {
+	stateId, _ := primitive.ObjectIDFromHex(statemachine.STATEID)
 	dbClient := database.Init()
 	tempSensor := sensor.Create(sensor.TEMP)
 	pressureSensor := sensor.Create(sensor.PRESSURE)
@@ -35,6 +37,7 @@ func main() {
 	go http.Serve(l, nil)
 
 	for true {
+		database.Update(dbClient, database.STATUS, bson.M{"$set": bson.M{"value": statemachine.CoffeeMaker.State}}, bson.M{"_id": stateId})
 		sensor.ReadValue(dbClient, &tempSensor)
 		sensor.ReadValue(dbClient, &pressureSensor)
 
@@ -55,7 +58,5 @@ func main() {
 		default:
 			println("Do nothing")
 		}
-		println(statemachine.CoffeeMaker.State)
-		time.Sleep(time.Second)
 	}
 }

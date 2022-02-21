@@ -10,6 +10,7 @@ import SensorTile from "./sensors/components/SensorTile";
 import "./App.scss";
 import { statusWs, turnOff, turnOn } from "./status/statusThunks";
 import { selectStatus } from "./status/statusSelector";
+import PowerButton from "./status/components/PowerButton";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -29,16 +30,12 @@ function App() {
     };
   }, []);
 
-  const handlePower = () => {
-    if (isPowerOn) {
-      turnOff();
-    } else {
-      turnOn();
-    }
-  };
-
   return (
     <div className="container">
+      <div className="header">
+        <h4>Coffee Maker Pro</h4>
+        <PowerButton isPowerON={isPowerOn} />
+      </div>
       <div className="sensor-wrapper">
         <SensorTile
           title="Temperature"
@@ -46,10 +43,9 @@ function App() {
           unit="Celsius"
         />
         <SensorTile title="Pressure" sensorData={currentPressure} unit="bar" />
+        <SensorTile title="Grinding" sensorData={currentPressure} unit="Step" />
       </div>
-      <button onClick={handlePower}>
-        {isPowerOn ? "Turn off" : "Turn on"}
-      </button>
+      <p>{status.status}</p>
     </div>
   );
 }

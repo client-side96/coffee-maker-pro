@@ -49,31 +49,38 @@ func (s *StateMachine) SetState(newState StateType) {
 }
 
 func TransitionState(event EventType) StateType {
+	log.Printf("Event received: %s", event)
 	dbClient := database.Init()
 	stateId, _ := primitive.ObjectIDFromHex(STATEID)
 	switch event {
 	case TurnOn:
 		CoffeeMaker.SetState(Idle)
 		database.Update(dbClient, database.STATUS, bson.M{"$set": bson.M{"value": Idle}}, bson.M{"_id": stateId})
+		log.Printf("State changed to: %s", Idle)
 		return Idle
 	case TurnOff:
 		CoffeeMaker.SetState(Off)
-		database.Update(dbClient, database.STATUS, bson.M{"$set": bson.M{"value": Off}}, bson.M{"_id": stateId})
+		log.Printf("State changed to: %s", Off)
 		return Off
 	case ApplyConfig:
 		CoffeeMaker.SetState(Applying)
+		log.Printf("State changed to: %s", Applying)
 		return Applying
 	case ChangeConfig:
 		CoffeeMaker.SetState(Idle)
+		log.Printf("State changed to: %s", Idle)
 		return Idle
 	case SetReady:
 		CoffeeMaker.SetState(Ready)
+		log.Printf("State changed to: %s", Ready)
 		return Ready
 	case StartBrewing:
 		CoffeeMaker.SetState(Brewing)
+		log.Printf("State changed to: %s", Brewing)
 		return Brewing
 	case StopBrewing:
 		CoffeeMaker.SetState(Idle)
+		log.Printf("State changed to: %s", Idle)
 		return Idle
 	default:
 		log.Println("No valid event was sent")
