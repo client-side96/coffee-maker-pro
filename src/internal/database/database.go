@@ -20,6 +20,7 @@ var connectionString = "mongodb://" + USER + ":" + PW + "@" + HOST + ":" + PORT 
 
 func Init() *mongo.Client {
 	clientOptions := options.Client().ApplyURI(connectionString)
+	log.Println("Connecting to database...")
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -31,6 +32,7 @@ func Init() *mongo.Client {
 
 	//defer client.Disconnect(ctx)
 
+	log.Println("Database connected.")
 	return client
 }
 
@@ -47,6 +49,15 @@ func Query[T any](client *mongo.Client, collection CollectionName, queryFilter b
 func Insert[T any](client *mongo.Client, collection CollectionName, payload T) *mongo.InsertOneResult {
 	coll := client.Database(DB).Collection(string(collection))
 	result, err := coll.InsertOne(ctx, payload)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return result
+}
+
+func Update(client *mongo.Client, collection CollectionName, payload bson.M, queryFiler bson.M) *mongo.UpdateResult {
+	coll := client.Database(DB).Collection(string(collection))
+	result, err := coll.UpdateOne(ctx, queryFiler, payload)
 	if err != nil {
 		log.Fatal(err)
 	}

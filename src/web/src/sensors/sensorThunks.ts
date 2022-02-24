@@ -20,4 +20,6 @@ export const sensorWs = () => (dispatch: AppDispatch) => {
   };
 
   c.onopen = function () {};
+
+  return c.close;
 };
