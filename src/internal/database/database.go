@@ -36,6 +36,15 @@ func Init() *mongo.Client {
 	return client
 }
 
+func QueryAll(client *mongo.Client, collection CollectionName, queryFilter bson.M, opts *options.FindOptions) *mongo.Cursor {
+	coll := client.Database(DB).Collection(string(collection))
+	cursor, err := coll.Find(ctx, queryFilter, opts)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return cursor
+}
+
 func Query[T any](client *mongo.Client, collection CollectionName, queryFilter bson.M, opts *options.FindOneOptions) T {
 	var result T
 	coll := client.Database(DB).Collection(string(collection))
@@ -58,6 +67,15 @@ func Insert[T any](client *mongo.Client, collection CollectionName, payload T) *
 func Update(client *mongo.Client, collection CollectionName, payload bson.M, queryFiler bson.M) *mongo.UpdateResult {
 	coll := client.Database(DB).Collection(string(collection))
 	result, err := coll.UpdateOne(ctx, queryFiler, payload)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return result
+}
+
+func Delete(client *mongo.Client, collection CollectionName, queryFilter bson.M) *mongo.DeleteResult {
+	coll := client.Database(DB).Collection(string(collection))
+	result, err := coll.DeleteOne(ctx, queryFilter)
 	if err != nil {
 		log.Fatal(err)
 	}

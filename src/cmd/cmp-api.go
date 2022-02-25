@@ -19,12 +19,13 @@ func main() {
 		v1.GET("/status", api.GetStatus)
 		v1.POST("/status/power/on", api.TurnOn)
 		v1.POST("/status/power/off", api.TurnOff)
+		v1.GET("/config", api.GetConfig)
+		v1.GET("/config/:id", api.GetConfigById)
+		v1.POST("/config", api.CreateConfig)
+		v1.PUT("/config/:id", api.UpdateConfig)
+		v1.DELETE("/config/:id", api.DeleteConfig)
 		// POST /state/brew/start -> Transition StartBrewing
 		// POST /state/brew/stop => Transition StopBrewing
-		// GET /config -> Retrieve current configuration
-		// POST /config/create -> Create new configuration
-		// PUT /config/update -> Update configuration
-		// DELETE /config/delete -> Delete configuration
 		// POST /config/apply -> Transition ChangeConfig
 	}
 
