@@ -11,18 +11,30 @@ import "./App.scss";
 import { statusWs, turnOff, turnOn } from "./status/statusThunks";
 import { selectStatus } from "./status/statusSelector";
 import PowerButton from "./status/components/PowerButton";
+import ConfigList from "./config/components/ConfigList";
+import ConfigForm from "./config/components/ConfigForm";
+import {
+  selectConfigFormValues,
+  selectConfigs,
+} from "./config/configSelectors";
+import { getConfigs } from "./config/configThunks";
+import { initializeCreateConfigForm } from "./config/configReducer";
 
 function App() {
   const dispatch = useAppDispatch();
   const currentTemp = useAppSelector(selectTempSensor);
   const currentPressure = useAppSelector(selectPressureSensor);
   const status = useAppSelector(selectStatus);
+  const configs = useAppSelector(selectConfigs);
+  const configFormValues = useAppSelector(selectConfigFormValues);
 
   const isPowerOn = status.status !== "Off";
 
   React.useEffect(() => {
     const closeSensorConnection = dispatch(sensorWs());
     const closeStatusConnection = dispatch(statusWs());
+    dispatch(getConfigs());
+    dispatch(initializeCreateConfigForm());
 
     return () => {
       closeSensorConnection();
@@ -45,7 +57,10 @@ function App() {
         <SensorTile title="Pressure" sensorData={currentPressure} unit="bar" />
         <SensorTile title="Grinding" sensorData={currentPressure} unit="Step" />
       </div>
-      <p>{status.status}</p>
+      <div className="config-wrapper">
+        <ConfigList configs={configs} />
+        {configFormValues && <ConfigForm formValues={configFormValues} />}
+      </div>
     </div>
   );
 }

@@ -59,6 +59,7 @@ func UpdateConfig(c *gin.Context) {
 	json.Unmarshal(byteResult, &payload)
 	id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 	response := database.Update(client, database.CONFIG, bson.M{"$set": bson.M{
+		"name":      payload.Name,
 		"temp":      payload.Temp,
 		"pressure":  payload.Pressure,
 		"grinding":  payload.Grinding,

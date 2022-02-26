@@ -1,0 +1,23 @@
+.config-item {
+  padding: 1.5em 1em;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  h4{ width: 100%; margin: 0 0 0.5em 0}
+
+  p{
+    margin-right: 2em;
+  }
+  .config-actions{
+    margin-left: auto;
+
+    a {
+      cursor: pointer;
+      text-decoration: underline;
+      color: #3f37c9;
+      margin-left: 2em;
+    }
+  }
+}

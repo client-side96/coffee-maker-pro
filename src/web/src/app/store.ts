@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import sensorReducer from "../sensors/sensorReducer";
 import statusReducer from "../status/statusReducer";
+import configReducer from "../config/configReducer";
 
 export const store = configureStore({
   reducer: {
     sensor: sensorReducer,
     status: statusReducer,
+    config: configReducer,
   },
 });
 

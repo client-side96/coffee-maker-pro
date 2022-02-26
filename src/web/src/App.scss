@@ -12,3 +12,9 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.config-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2em;
+}
