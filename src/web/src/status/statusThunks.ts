@@ -1,11 +1,6 @@
 import { AppDispatch } from "../app/store";
-import { Sensor } from "../sensors/sensorTypes";
-import {
-  setPressureSensor,
-  setTemperatureSensor,
-} from "../sensors/sensorReducer";
 import { setStatus } from "./statusReducer";
-import { Status, StatusResponse, StatusState } from "./statusTypes";
+import { StatusResponse } from "./statusTypes";
 
 export const statusWs = () => (dispatch: AppDispatch) => {
   const url = "ws://localhost:8080/api/status";

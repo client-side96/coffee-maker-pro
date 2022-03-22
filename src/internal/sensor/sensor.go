@@ -11,10 +11,19 @@ import (
 
 const EnvironmentTemp = 23
 const InitialPressure = 0.5
+const InitialVolume = 18
+const InitialTime = 20
+const InitialGrinding = 25
 
 func getNameBySensorType(sensorType SensorType) string {
 	if sensorType == TEMP {
 		return TEMP_NAME
+	} else if sensorType == VOLUME {
+		return VOLUME_NAME
+	} else if sensorType == TIME {
+		return TIME_NAME
+	} else if sensorType == GRINDING {
+		return GRINDING_NAME
 	}
 	return PRESSURE_NAME
 }

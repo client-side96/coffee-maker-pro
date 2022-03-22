@@ -17,6 +17,8 @@ const configSlice = createSlice({
         temp: 0,
         pressure: 0,
         grinding: 20,
+        volume: 0,
+        time: 0,
       };
     },
     initializeUpdateConfigForm(state, action: PayloadAction<Config>) {

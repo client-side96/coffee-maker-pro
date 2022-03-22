@@ -1,5 +1,4 @@
 .sensor-tile {
-  background-color: #3f37c9;
   color: #fff;
   width: calc(33% - 6em);
   padding: 1em 2em;
@@ -20,12 +19,24 @@
     }
   }
 
-
-
-  p{
+  p {
     font-weight: bold;
     font-size: 1.5em;
   }
+}
 
+.off {
+  background-color: black;
+}
 
+.idle {
+  background-color: #3f37c9;
+}
+
+.applying {
+  background-color: orange;
+}
+
+.ready {
+  background-color: green;
 }

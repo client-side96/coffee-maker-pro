@@ -16,7 +16,7 @@ const PowerButton: React.FC<PowerButtonProps> = ({ isPowerON }) => {
   };
   return (
     <a className="power-btn" onClick={handlePower}>
-      {isPowerON ? "Turn off" : "Turn on"}
+      {isPowerON ? "Ausschalten" : "Anschalten"}
     </a>
   );
 };

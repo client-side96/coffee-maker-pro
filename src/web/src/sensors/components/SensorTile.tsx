@@ -1,13 +1,16 @@
 import React from "react";
+import clsx from "clsx";
 import { Sensor, SensorType } from "../sensorTypes";
 import "./SensorTile.scss";
 import TemperatureIcon from "../../icons/TemperatureIcon";
 import PressureIcon from "../../icons/PressureIcon";
+import { Status } from "../../status/statusTypes";
 
 interface SensorTileProps {
   title: string;
   sensorData: Sensor | null;
   unit: string;
+  currentStatus: Status;
 }
 
 const SensorIcon: React.FC<{ type?: SensorType }> = ({ type }) => {
@@ -21,9 +24,15 @@ const SensorIcon: React.FC<{ type?: SensorType }> = ({ type }) => {
   }
 };
 
-const SensorTile: React.FC<SensorTileProps> = ({ title, sensorData, unit }) => {
+const SensorTile: React.FC<SensorTileProps> = ({
+  title,
+  sensorData,
+  unit,
+  currentStatus,
+}) => {
+  const colorClassName = currentStatus.toLowerCase();
   return (
-    <div className="sensor-tile">
+    <div className={clsx("sensor-tile", colorClassName)}>
       <div className="sensor-header">
         <h5>{title}</h5>
         <SensorIcon type={sensorData?.sensorType} />

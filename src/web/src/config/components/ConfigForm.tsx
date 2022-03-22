@@ -19,7 +19,9 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ formValues }) => {
   return (
     <div className="config-form">
       <h3>
-        {formValues._id ? "Update configuration" : "Create new configuration"}
+        {formValues._id
+          ? "Konfiguration bearbeiten"
+          : "Neue Konfiguration erstellen"}
       </h3>
       <Formik
         initialValues={formValues}
@@ -38,6 +40,10 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ formValues }) => {
             <FastField name="pressure" type="number" onChange={handleChange} />
             <label>Grinding:</label>
             <FastField name="grinding" type="number" onChange={handleChange} />
+            <label>Volume:</label>
+            <FastField name="volume" type="number" onChange={handleChange} />
+            <label>Time:</label>
+            <FastField name="time" type="number" onChange={handleChange} />
             <button type="submit">Save</button>
           </Form>
         )}

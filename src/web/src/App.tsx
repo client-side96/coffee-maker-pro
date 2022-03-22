@@ -2,13 +2,15 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { sensorWs } from "./sensors/sensorThunks";
 import {
+  selectGrindingSensor,
   selectPressureSensor,
   selectTempSensor,
+  selectTimeSensor,
+  selectVolumeSensor,
 } from "./sensors/sensorSelectors";
-import { Sensor } from "./sensors/sensorTypes";
 import SensorTile from "./sensors/components/SensorTile";
 import "./App.scss";
-import { statusWs, turnOff, turnOn } from "./status/statusThunks";
+import { statusWs } from "./status/statusThunks";
 import { selectStatus } from "./status/statusSelector";
 import PowerButton from "./status/components/PowerButton";
 import ConfigList from "./config/components/ConfigList";
@@ -24,6 +26,9 @@ function App() {
   const dispatch = useAppDispatch();
   const currentTemp = useAppSelector(selectTempSensor);
   const currentPressure = useAppSelector(selectPressureSensor);
+  const currentVolume = useAppSelector(selectVolumeSensor);
+  const currentTime = useAppSelector(selectTimeSensor);
+  const currentGrinding = useAppSelector(selectGrindingSensor);
   const status = useAppSelector(selectStatus);
   const configs = useAppSelector(selectConfigs);
   const configFormValues = useAppSelector(selectConfigFormValues);
@@ -50,12 +55,35 @@ function App() {
       </div>
       <div className="sensor-wrapper">
         <SensorTile
-          title="Temperature"
+          title="Wassertemperatur"
           sensorData={currentTemp}
           unit="Celsius"
+          currentStatus={status.status}
         />
-        <SensorTile title="Pressure" sensorData={currentPressure} unit="bar" />
-        <SensorTile title="Grinding" sensorData={currentPressure} unit="Step" />
+        <SensorTile
+          title="Wasserdruck"
+          sensorData={currentPressure}
+          unit="bar"
+          currentStatus={status.status}
+        />
+        <SensorTile
+          title="Mahlgrad"
+          sensorData={currentGrinding}
+          unit="Step"
+          currentStatus={status.status}
+        />
+        <SensorTile
+          title="Wasservolumen"
+          sensorData={currentVolume}
+          unit="ml"
+          currentStatus={status.status}
+        />
+        <SensorTile
+          title="Durchlaufzeit"
+          sensorData={currentTime}
+          unit="Sekunden"
+          currentStatus={status.status}
+        />
       </div>
       <div className="config-wrapper">
         <ConfigList configs={configs} />

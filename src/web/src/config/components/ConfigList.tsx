@@ -4,7 +4,7 @@ import { Config } from "../configTypes";
 import ConfigListItem from "./ConfigListItem";
 import { useAppDispatch } from "../../app/hooks";
 import { initializeUpdateConfigForm } from "../configReducer";
-import { deleteConfig, getConfigById } from "../configThunks";
+import { applyConfig, deleteConfig, getConfigById } from "../configThunks";
 
 export type ConfigListProps = {
   configs: Config[];
@@ -22,9 +22,14 @@ const ConfigList: React.FC<ConfigListProps> = ({ configs }) => {
       dispatch(deleteConfig(id));
     }
   };
+  const handleApply = (id: string | null) => {
+    if (id) {
+      dispatch(applyConfig(id));
+    }
+  };
   return (
     <div className="config-list">
-      <h3>Saved configurations:</h3>
+      <h3>Gespeicherte Konfigurationen:</h3>
       {configs && configs.length ? (
         configs.map((config, index) => (
           <ConfigListItem
@@ -32,10 +37,11 @@ const ConfigList: React.FC<ConfigListProps> = ({ configs }) => {
             config={config}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onApply={handleApply}
           />
         ))
       ) : (
-        <p>No configs available</p>
+        <p>Bisher wurden keine Konfigurationen abgespeichert.</p>
       )}
     </div>
   );

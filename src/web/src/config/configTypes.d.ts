@@ -4,6 +4,8 @@ export interface Config {
   temp: number;
   pressure: number;
   grinding: number;
+  volume: number;
+  time: number;
   isApplied?: boolean;
 }
 

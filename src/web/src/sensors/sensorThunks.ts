@@ -1,6 +1,6 @@
 import { AppDispatch } from "../app/store";
 import { Sensor } from "./sensorTypes";
-import { setPressureSensor, setTemperatureSensor } from "./sensorReducer";
+import { setSensor } from "./sensorReducer";
 
 export const sensorWs = () => (dispatch: AppDispatch) => {
   const url = "ws://localhost:8080/api/sensors";
@@ -12,11 +12,7 @@ export const sensorWs = () => (dispatch: AppDispatch) => {
 
   c.onmessage = function (msg) {
     const response: Sensor = JSON.parse(msg.data);
-    if (response.sensorType === "temperature") {
-      dispatch(setTemperatureSensor(response));
-    } else {
-      dispatch(setPressureSensor(response));
-    }
+    dispatch(setSensor(response));
   };
 
   c.onopen = function () {};

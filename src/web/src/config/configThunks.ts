@@ -43,6 +43,18 @@ export const createConfig =
     }
   };
 
+export const applyConfig = (id: string) => async (dispatch: AppDispatch) => {
+  try {
+    await fetch(`http://localhost:8080/api/config/apply/${id}`, {
+      method: "PUT",
+    });
+    await dispatch(getConfigs());
+  } catch (err) {
+    console.error("Cannot apply config", err);
+    throw err;
+  }
+};
+
 export const updateConfig =
   (id: string, updatedConfig: Config) => async (dispatch: AppDispatch) => {
     try {

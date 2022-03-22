@@ -24,6 +24,7 @@ func main() {
 		v1.POST("/config", api.CreateConfig)
 		v1.PUT("/config/:id", api.UpdateConfig)
 		v1.DELETE("/config/:id", api.DeleteConfig)
+		v1.PUT("/config/apply/:id", api.ApplyConfig)
 		// POST /state/brew/start -> Transition StartBrewing
 		// POST /state/brew/stop => Transition StopBrewing
 		// POST /config/apply -> Transition ChangeConfig

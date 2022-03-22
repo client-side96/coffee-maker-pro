@@ -7,10 +7,16 @@ import (
 
 const TEMP_NAME = "temperature_sensor_0001"
 const PRESSURE_NAME = "pressure_sensor_0001"
+const VOLUME_NAME = "volume_sensor_0001"
+const TIME_NAME = "time_sensor_0001"
+const GRINDING_NAME = "grinding_sensor_0001"
 
 const (
 	TEMP     SensorType = "temperature"
 	PRESSURE SensorType = "pressure"
+	VOLUME   SensorType = "volume"
+	TIME     SensorType = "time"
+	GRINDING SensorType = "grinding"
 )
 
 type SensorType string

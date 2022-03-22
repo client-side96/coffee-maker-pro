@@ -4,20 +4,20 @@ import { SensorState, Sensor } from "./sensorTypes";
 const initialState: SensorState = {
   temperature: null,
   pressure: null,
+  volume: null,
+  time: null,
+  grinding: null,
 };
 
 const sensorSlice = createSlice({
   name: "sensor",
   initialState,
   reducers: {
-    setTemperatureSensor(state, action: PayloadAction<Sensor>) {
-      state.temperature = action.payload;
-    },
-    setPressureSensor(state, action: PayloadAction<Sensor>) {
-      state.pressure = action.payload;
+    setSensor(state, action: PayloadAction<Sensor>) {
+      state[action.payload.sensorType] = action.payload;
     },
   },
 });
 
-export const { setPressureSensor, setTemperatureSensor } = sensorSlice.actions;
+export const { setSensor } = sensorSlice.actions;
 export default sensorSlice.reducer;

@@ -35,9 +35,15 @@ func sensorWs(w http.ResponseWriter, r *http.Request) {
 
 	lastTemperature, _ := json.Marshal(database.Query[sensor.DBSensor](dbClient, database.SENSORS, bson.M{"type": sensor.TEMP}, findOptions))
 	lastPressure, _ := json.Marshal(database.Query[sensor.DBSensor](dbClient, database.SENSORS, bson.M{"type": sensor.PRESSURE}, findOptions))
+	lastVolume, _ := json.Marshal(database.Query[sensor.DBSensor](dbClient, database.SENSORS, bson.M{"type": sensor.VOLUME}, findOptions))
+	lastTime, _ := json.Marshal(database.Query[sensor.DBSensor](dbClient, database.SENSORS, bson.M{"type": sensor.TIME}, findOptions))
+	lastGrinding, _ := json.Marshal(database.Query[sensor.DBSensor](dbClient, database.SENSORS, bson.M{"type": sensor.GRINDING}, findOptions))
 
 	conn.WriteMessage(1, lastTemperature)
 	conn.WriteMessage(1, lastPressure)
+	conn.WriteMessage(1, lastVolume)
+	conn.WriteMessage(1, lastTime)
+	conn.WriteMessage(1, lastGrinding)
 
 	var changeStreamValue bson.M
 	var template sensor.DBSensor

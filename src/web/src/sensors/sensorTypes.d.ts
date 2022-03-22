@@ -9,4 +9,7 @@ export interface Sensor {
 export interface SensorState {
   temperature: Sensor | null;
   pressure: Sensor | null;
+  volume: Sensor | null;
+  time: Sensor | null;
+  grinding: Sensor | null;
 }

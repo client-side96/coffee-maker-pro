@@ -5,16 +5,16 @@ import (
 	"time"
 )
 
-func ChangeTemperature(tempSensor *Sensor, target float64) {
+func ChangeSensor(sensor *Sensor, target float64) {
 	log.Printf("Changing to target temperature: %f", target)
-	current := tempSensor.GetSensorValue()
+	current := sensor.GetSensorValue()
 	for current != target {
 		current = current + 2
 		if current > target {
-			tempSensor.SetSensorValue(target)
+			sensor.SetSensorValue(target)
 			return
 		}
-		tempSensor.SetSensorValue(current)
+		sensor.SetSensorValue(current)
 		time.Sleep(time.Second)
 	}
 }
